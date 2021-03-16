@@ -50,8 +50,12 @@ void rehash(struct HashTable* ht) {
     // set up
     int old_size = ht->size;
     int new_size = nextPrime(ht->size*2);
-    struct Element* old_table[old_size];
-    for (int i=0; i<old_size; i++) old_table[i] = ht->table[i];
+    struct Element** old_table = malloc(sizeof(struct Element) * old_size);
+    for (int i=0; i<old_size; i++) {
+        old_table[i] = malloc(sizeof(struct Element));
+        old_table[i]->key = ht->table[i]->key;
+        old_table[i]->val = ht->table[i]->val;
+    }
     unsigned old_assignments[old_size];
     for (int i=0; i<old_size; i++) old_assignments[i] = ht->assignments[i];
 
@@ -65,10 +69,14 @@ void rehash(struct HashTable* ht) {
     // 2. rehash all the keys - loop through old_table and rehash the indices in old_table at which old_assignments[i] = 1
     for (int i=0; i<old_size; i++) {
         if (old_assignments[i] == 1) {
-            printf("rehashing [%d]: %d -> %d\n", i, old_table[i]->key, old_table[i]->val);
+            // printf("rehashing [%d]: %d -> %d\n", i, old_table[i]->key, old_table[i]->val);
             htInsert(ht, old_table[i]->key, old_table[i]->val); // rehash
         }
     }
+
+    // 3. dealloc memory
+    for (int i=0; i<old_size; i++) free(old_table[i]);
+    free(old_table);
 }
 
 int arrIncludes(int* arr, int target, int size) {
@@ -348,31 +356,7 @@ unsigned htDeleteAllByValue(struct HashTable* ht, int val) {
     return count;
 }
 
-int main() {
-    // 2-12: not rehashing 14 -> 400 properly?
-    struct HashTable* h1 = htCreate(19);
-    // unsigned index = 10000;
-    printf("%d\n", htGetTableSize(h1));
-    htInsert(h1, 36, 59);
-    htInsert(h1, 37, 34);
-    htInsert(h1, 55, -18);
-    htInsert(h1, 1000, -17);
-    htInsert(h1, 20, 17);
-    htInsert(h1, 19, 20);
-    htInsert(h1, 14, 400);
-    printf("%d\n", htInsert(h1, 55, 599));
-    htPrint(h1);
-    // printf("%d\n", htInsert(h1, 74, 673)); 
-    printf("%d\n", htInsert(h1, 207, 473));
-    printf("%d\n", htInsert(h1, 77, 73));
-    // htPrint(h1);
-    // printf("%d\n", htGetTableSize(h1));
-    // printf("%d\n", htGetIndex(h1, 207, &index));
-    // printf("Index: %u\n", index);
-    // printf("%d\n", htGetIndex(h1, 77, &index));
-    // printf("Index: %u\n", index);
-    // htPrint(h1);
-
+// int main() {
     // 2-27
 
     // test q probing loop detection
@@ -387,4 +371,4 @@ int main() {
     // htInsert(h1, 91, 1);
     // htPrint(h1);
     // htDestroy(h1);
-}
+// }
