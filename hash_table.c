@@ -356,10 +356,10 @@ unsigned htDeleteAllByValue(struct HashTable* ht, int val) {
     return count;
 }
 
-int main() {
+// int main() {
     // things to test
     // 1. infinite probing - when a key cannot be inserted
     // 2. htGetIndex - can it return index of key that was placed via probe and not direct hash?
     // 3. htGetValue - same as (2) but with values
     // 4. htUpdate - same as (2), must be able to find keys that were hashed post collision
-}
+// }
