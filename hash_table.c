@@ -180,23 +180,23 @@ unsigned htGetNumElements(const struct HashTable* ht) {
 unsigned htInsert(struct HashTable* ht, unsigned key, int val) {
     if (!ht) return 0;
 
-    // check for rehash here, before insert
+    // 1. check if @key already exists in table somewhere
+    for (int i=0; i<ht->size; i++) {
+        if (ht->assignments[i] == 1) {
+            if (ht->table[i]->key == key) return 0;
+        }
+    }
+
+    // 2. REHASH IF NEEDED here, before insert
     // if (numElems + 1) / tablesize >= 0.5, rehash (create a new table and hash everything again)
     float loadfactor = (float) (htGetNumElements(ht) + 1) / ht->size;
     if (loadfactor >= 0.5) {
         rehash(ht);
     }
 
+    // 3. INSERT
     // get the hashval
     int hashval = hash(key, ht);
-
-    // check if @key already exists in table somewhere
-    for (int i=0; i<ht->size; i++) {
-        // seg fault here
-        if (ht->assignments[i] == 1) {
-            if (ht->table[i]->key == key) return 0;
-        }
-    }
 
     // try 1st insert
     if (ht->assignments[hashval] == 0) { 
@@ -268,7 +268,21 @@ unsigned htGetValue(const struct HashTable* ht, unsigned key, int* val) {
     if (ht->table[hashval]->key == key && ht->assignments[hashval] == 1) {
         *val = ht->table[hashval]->val;
         return 1;
-    } else return 0;
+    } else {
+        unsigned index = hashval + 1 != ht->size ? hashval + 1 : 0;
+        while (index != hashval) {
+            if (ht->table[index]->key == key && ht->assignments[index] == 1) {
+                *val = ht->table[index]->val;
+                return 1;
+            } else {
+                if (index == ht->size-1) index = 0; // wrap around
+                else index+=1;
+            }
+        }
+
+        // if we reach here, then *index = hashval and we searched entire table w/o finding key
+        return 0;
+    }
 }
 
 /**
@@ -287,7 +301,6 @@ unsigned htGetValue(const struct HashTable* ht, unsigned key, int* val) {
 unsigned htGetIndex(const struct HashTable* ht, unsigned key, unsigned* index) {
     if (!ht || !index) return 0;
     int hashval = hash(key, ht);
-    // printf("getIndex: hashval = %d, key = %d, ht[hashval]->key = %d\n", hashval, key, ht->table[hashval]->key);
 
     // key was inserted without collision
     if (ht->table[hashval]->key == key && ht->assignments[hashval] == 1) {
@@ -295,7 +308,7 @@ unsigned htGetIndex(const struct HashTable* ht, unsigned key, unsigned* index) {
         return 1;
     // search the rest of the table
     } else {        
-        *index = hashval + 1;
+        *index = hashval + 1 != ht->size ? hashval + 1 : 0;
         while (*index != hashval) {
             if (ht->table[*index]->key == key && ht->assignments[*index] == 1) return 1;
             else {
@@ -362,10 +375,18 @@ int main() {
     // 2. htGetIndex - can it return index of key that was placed via probe and not direct hash?
     struct HashTable* ht = htCreate(5);
     unsigned index = 100;
-    htInsert(ht, 9, 9); 
-    htInsert(ht, 19, 19);
-    htPrint(ht);
+    int val = 900;
+    htInsert(ht, 8, 9); 
+    htInsert(ht, 18, 19);
+    assert(htInsert(ht, 19, 79)==1); // this should not cause a rehash since the insert fails
     assert(htGetIndex(ht, 19, &index) == 1);
+    assert(index == 9);
+    htPrint(ht);
+    assert(htGetValue(ht,19,&val)==1);
+    assert(val==79);
+    assert(htGetNumElements(ht)==3);
+
+    htDestroy(ht);
 
     // 3. htGetValue - same as (2) but with values
     // 4. htUpdate - same as (2), must be able to find keys that were hashed post collision

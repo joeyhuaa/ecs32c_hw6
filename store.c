@@ -13,7 +13,7 @@ struct Store* initStore(const char* storeName, const char* fileName)
     fgets(line, MAX_LINE_LEN, file);
     int n = atoi(line);
     struct Store* s = malloc(sizeof(struct Store));
-    s->storeName = malloc(sizeof(char) * strlen(storeName));
+    s->storeName = malloc(sizeof(char) * (strlen(storeName) + 1));
     strcpy(s->storeName, storeName);
     s->items = malloc(sizeof(struct Item) * n);
     s->numItems = n;
