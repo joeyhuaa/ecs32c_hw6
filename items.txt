@@ -1,0 +1,5 @@
+4
+Book 10 2
+ToiletPaper 5 0
+RamenCup 2 5
+Deodorant 3 7
