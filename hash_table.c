@@ -349,19 +349,9 @@ unsigned htDeleteAllByValue(struct HashTable* ht, int val) {
 }
 
 int main() {
-//     // 2-5: why does autograder rehash from 3->7 instead of 3->5->7?
-//     // struct HashTable* h1 = htCreate(3);            
-//     // htInsert(h1, 82, -900);       
-//     // // htPrint(h1);        
-//     // htInsert(h1, 0, -50);  // triggers rehash            
-//     // htPrint(h1);            
-//     // htInsert(h1, 8, 0);            
-//     // printf("=====\n");            
-//     // htPrint(h1);
-
-//     // 2-12: not rehashing 14 -> 400 properly?
+    // 2-12: not rehashing 14 -> 400 properly?
     struct HashTable* h1 = htCreate(19);
-    unsigned index = 10000;
+    // unsigned index = 10000;
     printf("%d\n", htGetTableSize(h1));
     htInsert(h1, 36, 59);
     htInsert(h1, 37, 34);
@@ -370,32 +360,31 @@ int main() {
     htInsert(h1, 20, 17);
     htInsert(h1, 19, 20);
     htInsert(h1, 14, 400);
+    printf("%d\n", htInsert(h1, 55, 599));
     htPrint(h1);
-    printf("%d\n", htInsert(h1, 55, 599)); // failed insert
-    printf("%d\n", htInsert(h1, 74, 673)); 
-    printf("%d\n", htInsert(h1, 207, 473)); 
-    htPrint(h1);
-    printf("%d\n", htInsert(h1, 77, 73)); // rehash 19 -> 23
-    printf("%d\n", htGetTableSize(h1));
-    printf("%d\n", htGetIndex(h1, 207, &index));
-    printf("Index: %u\n", index);
-    printf("%d\n", htGetIndex(h1, 77, &index));
-    printf("Index: %u\n", index);
-    htPrint(h1);
+    // printf("%d\n", htInsert(h1, 74, 673)); 
+    printf("%d\n", htInsert(h1, 207, 473));
+    printf("%d\n", htInsert(h1, 77, 73));
+    // htPrint(h1);
+    // printf("%d\n", htGetTableSize(h1));
+    // printf("%d\n", htGetIndex(h1, 207, &index));
+    // printf("Index: %u\n", index);
+    // printf("%d\n", htGetIndex(h1, 77, &index));
+    // printf("Index: %u\n", index);
+    // htPrint(h1);
 
-//     // 2-27
+    // 2-27
 
-
-//     // test q probing loop detection
-//     // struct HashTable* h1 = htCreate(11);  
-//     // htInsert(h1, 14, 1);
-//     // htInsert(h1, 25, 1);
-//     // htInsert(h1, 36, 1);
-//     // htInsert(h1, 47, 1);
-//     // htInsert(h1, 58, 1);
-//     // htInsert(h1, 69, 1);
-//     // htInsert(h1, 80, 1);
-//     // htInsert(h1, 91, 1);
-//     // htPrint(h1);
-//     // htDestroy(h1);
+    // test q probing loop detection
+    // struct HashTable* h1 = htCreate(11);  
+    // htInsert(h1, 14, 1);
+    // htInsert(h1, 25, 1);
+    // htInsert(h1, 36, 1);
+    // htInsert(h1, 47, 1);
+    // htInsert(h1, 58, 1);
+    // htInsert(h1, 69, 1);
+    // htInsert(h1, 80, 1);
+    // htInsert(h1, 91, 1);
+    // htPrint(h1);
+    // htDestroy(h1);
 }
