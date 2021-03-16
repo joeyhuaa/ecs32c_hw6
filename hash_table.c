@@ -356,19 +356,10 @@ unsigned htDeleteAllByValue(struct HashTable* ht, int val) {
     return count;
 }
 
-// int main() {
-    // 2-27
-
-    // test q probing loop detection
-    // struct HashTable* h1 = htCreate(11);  
-    // htInsert(h1, 14, 1);
-    // htInsert(h1, 25, 1);
-    // htInsert(h1, 36, 1);
-    // htInsert(h1, 47, 1);
-    // htInsert(h1, 58, 1);
-    // htInsert(h1, 69, 1);
-    // htInsert(h1, 80, 1);
-    // htInsert(h1, 91, 1);
-    // htPrint(h1);
-    // htDestroy(h1);
-// }
+int main() {
+    // things to test
+    // 1. infinite probing - when a key cannot be inserted
+    // 2. htGetIndex - can it return index of key that was placed via probe and not direct hash?
+    // 3. htGetValue - same as (2) but with values
+    // 4. htUpdate - same as (2), must be able to find keys that were hashed post collision
+}
