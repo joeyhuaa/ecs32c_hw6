@@ -364,7 +364,22 @@ unsigned htDelete(struct HashTable* ht, unsigned key) {
     if (ht->table[hashval]->key == key && ht->assignments[hashval] == 1) {
         ht->assignments[hashval] = 0; // lazy deletion
         return 1;
-    } else return 0;
+    } else {
+        unsigned index = hashval + 1 != ht->size ? hashval + 1 : 0;
+        while (index != hashval) {
+            if (ht->table[index]->key == key && ht->assignments[index] == 1) {
+                ht->assignments[index] = 0; // lazy deletion
+                return 1;
+            }
+            else {
+                if (index == ht->size-1) index = 0; // wrap around
+                else index+=1;
+            }
+        }
+
+        // if we reach here, then index = hashval and we searched entire table w/o finding key
+        return 0;
+    }
 }
 
 /**
@@ -386,4 +401,13 @@ unsigned htDeleteAllByValue(struct HashTable* ht, int val) {
 }
 
 // int main() {
+//     struct HashTable* ht = htCreate(19);
+//     htInsert(ht,19,19);
+//     htInsert(ht,56,56);
+//     htInsert(ht,77,77);
+//     htInsert(ht,44,44);
+//     htInsert(ht,38,38);
+//     assert(htDelete(ht, 380) == 0);
+//     htPrint(ht);
+//     printf("numElems: %d\n", htGetNumElements(ht));
 // }
