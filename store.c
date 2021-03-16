@@ -67,17 +67,17 @@ void printStoreItems(const struct Store* store)
     }
 }
 
-// int main() {
-//     // 1-1: this prints correctly?? why is it just '\n' when submitted to autograder?
-//     struct Store* store1 = NULL;
-//     struct Store* store2 = NULL;
-//     store1 = initStore("Safeway", "items.txt");            
-//     store2 = initStore("Safeway", "items2.txt");            
-//     printStoreItems(store1);            
-//     printStoreItems(store2);            
-//     struct Item* cheapest = getCheapestItem(store1);            
-//     printf ("Cheapest item: %s %d %d\n", cheapest->name, cheapest->price, cheapest->numInStock);
-//     deallocateStore(store1);
-//     deallocateStore(store2);
-//     free(cheapest);
-// }
+int main() {
+    // 1-1: this prints correctly?? why is it just '\n' when submitted to autograder?
+    struct Store* store1 = NULL;
+    struct Store* store2 = NULL;
+    store1 = initStore("Safeway", "items.txt");            
+    store2 = initStore("Safeway", "items2.txt");            
+    printStoreItems(store1);            
+    printStoreItems(store2);            
+    struct Item* cheapest = getCheapestItem(store1);            
+    printf ("Cheapest item: %s %d %d\n", cheapest->name, cheapest->price, cheapest->numInStock);
+    deallocateStore(store1);
+    deallocateStore(store2);
+    free(cheapest);
+}
