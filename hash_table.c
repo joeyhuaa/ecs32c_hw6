@@ -372,7 +372,7 @@ unsigned htDeleteAllByValue(struct HashTable* ht, int val) {
 int main() {
     // things to test
 
-    // 2. htGetIndex - can it return index of key that was placed via probe and not direct hash?
+    // 2. htGetValue - can it return index of key that was placed via probe and not direct hash?
     struct HashTable* ht = htCreate(5);
     unsigned index = 100;
     int val = 900;
@@ -382,12 +382,10 @@ int main() {
     assert(htGetIndex(ht, 19, &index) == 1);
     assert(index == 9);
     htPrint(ht);
-    assert(htGetValue(ht,19,&val)==1);
-    assert(val==79);
+    assert(htGetValue(ht,190,&val)==0);
+    assert(val==900);
     assert(htGetNumElements(ht)==3);
-
     htDestroy(ht);
 
-    // 3. htGetValue - same as (2) but with values
     // 4. htUpdate - same as (2), must be able to find keys that were hashed post collision
 }
