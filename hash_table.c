@@ -246,7 +246,23 @@ unsigned htUpdate(struct HashTable* ht, unsigned key, int val) {
     if (ht->table[hashval]->key == key && ht->assignments[hashval] == 1) {
         ht->table[hashval]->val = val;
         return 1;
-    } else return 0;
+    } else {
+    // search the rest of the table for key
+        unsigned index = hashval + 1 != ht->size ? hashval + 1 : 0;
+        while (index != hashval) {
+            if (ht->table[index]->key == key && ht->assignments[index] == 1) {
+                ht->table[index]->val = val;
+                return 1;
+            }
+            else {
+                if (index == ht->size-1) index = 0; // wrap around
+                else index+=1;
+            }
+        }
+
+        // if we reach here, then index = hashval and we searched entire table w/o finding key
+        return 0;
+    };
 }
 
 /**
@@ -369,23 +385,5 @@ unsigned htDeleteAllByValue(struct HashTable* ht, int val) {
     return count;
 }
 
-int main() {
-    // things to test
-
-    // 2. htGetValue - can it return index of key that was placed via probe and not direct hash?
-    struct HashTable* ht = htCreate(5);
-    unsigned index = 100;
-    int val = 900;
-    htInsert(ht, 8, 9); 
-    htInsert(ht, 18, 19);
-    assert(htInsert(ht, 19, 79)==1); // this should not cause a rehash since the insert fails
-    assert(htGetIndex(ht, 19, &index) == 1);
-    assert(index == 9);
-    htPrint(ht);
-    assert(htGetValue(ht,190,&val)==0);
-    assert(val==900);
-    assert(htGetNumElements(ht)==3);
-    htDestroy(ht);
-
-    // 4. htUpdate - same as (2), must be able to find keys that were hashed post collision
-}
+// int main() {
+// }
