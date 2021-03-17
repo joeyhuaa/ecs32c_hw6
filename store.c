@@ -72,7 +72,7 @@ int main() {
     struct Store* store1 = NULL;
     struct Store* store2 = NULL;
     store1 = initStore("Safeway", "items.txt");            
-    store2 = initStore("Safeway", "items2.txt");            
+    store2 = initStore("Safeway", "items.txt");            
     printStoreItems(store1);            
     printStoreItems(store2);            
     struct Item* cheapest = getCheapestItem(store1);            
